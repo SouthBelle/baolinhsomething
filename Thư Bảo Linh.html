@@ -1,0 +1,216 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Thư Bảo Linh</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Dancing+Script:wght@600&display=swap">
+<style>
+/* Layout: one night scene, a wax-sealed envelope in the centre; tapping the seal opens it and a parchment letter takes over. */
+:root {
+  --night-top: #0b1030;
+  --night-bot: #261a4a;
+  --parch: #ecdcb3;
+  --parch-edge: #c9a96a;
+  --ink: #3a2616;
+  --wax: #8e1b24;
+  --gold: #e8c26a;
+  --env: #d9c08a;
+  --env-dark: #b99a5e;
+  --display: "Cormorant Garamond", "Times New Roman", serif;
+  --hand: "Dancing Script", "Segoe Script", cursive;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: linear-gradient(180deg, var(--night-top), var(--night-bot));
+  color: var(--parch);
+  font-family: var(--display);
+  overflow: hidden;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+#sky { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.castle {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 22vh; min-height: 120px;
+  background: #07091f;
+  clip-path: polygon(0 100%,0 62%,6% 62%,6% 40%,8% 30%,10% 40%,10% 58%,18% 58%,18% 36%,20% 18%,22% 36%,22% 62%,34% 62%,34% 48%,40% 48%,40% 25%,42% 8%,44% 25%,44% 48%,56% 48%,56% 60%,66% 60%,66% 34%,68% 20%,70% 34%,70% 60%,80% 60%,80% 44%,82% 32%,84% 44%,84% 56%,92% 56%,92% 38%,94% 26%,96% 38%,96% 62%,100% 62%,100% 100%);
+}
+.candle { position: fixed; width: 14px; height: 46px; border-radius: 3px 3px 2px 2px; background: linear-gradient(90deg, #f3ead0, #d9cba3); animation: bob 5s ease-in-out infinite; }
+.candle::before { content: ""; position: absolute; left: 50%; top: -17px; width: 10px; height: 18px; margin-left: -5px; border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%; background: radial-gradient(circle at 50% 70%, #fff6c8, #ffb938 60%, #ff7a1a); box-shadow: 0 0 18px 6px rgba(255,178,60,.55); animation: flick .3s ease-in-out infinite alternate; }
+@keyframes bob { 50% { transform: translateY(-14px); } }
+@keyframes flick { to { transform: scale(1.12, .92) rotate(3deg); opacity: .92; } }
+
+.stage { position: relative; z-index: 2; height: 100%; display: grid; place-items: center; }
+.hint { position: absolute; bottom: calc(26vh + 8px); left: 0; right: 0; text-align: center; font-style: italic; font-size: 1.15rem; letter-spacing: .04em; color: var(--gold); animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .45; } }
+
+.envelope { position: relative; width: min(86vw, 420px); aspect-ratio: 7 / 5; perspective: 900px; transition: opacity .6s ease, transform .6s ease; }
+.env-back, .env-front { position: absolute; inset: 0; border-radius: 6px; }
+.env-back { background: var(--env-dark); box-shadow: 0 22px 50px rgba(0,0,0,.55); }
+.env-front { background: var(--env); clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%); }
+.env-front::after { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(0,0,0,.08)); }
+.flap {
+  position: absolute; left: 0; right: 0; top: 0; height: 54%;
+  background: linear-gradient(180deg, #cfb176, var(--env));
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center; transition: transform .9s cubic-bezier(.5,0,.2,1), z-index 0s .45s;
+  z-index: 3;
+}
+.envelope.open .flap { transform: rotateX(180deg); z-index: 0; }
+.addr { position: absolute; left: 0; right: 0; bottom: 14%; text-align: center; font-family: var(--hand); font-size: clamp(1.1rem, 4.6vw, 1.6rem); color: var(--ink); z-index: 2; }
+.seal {
+  position: absolute; z-index: 4; left: 50%; top: 54%; width: 22%; aspect-ratio: 1; margin: -11% 0 0 -11%;
+  border: 0; border-radius: 50%; cursor: pointer; padding: 0;
+  background: radial-gradient(circle at 35% 30%, #c3303a, var(--wax) 60%, #5a0f16);
+  box-shadow: 0 4px 10px rgba(0,0,0,.5), inset 0 0 0 4px rgba(0,0,0,.12);
+  color: #f3c9a8; font-family: var(--display); font-weight: 700; font-size: clamp(1rem, 5vw, 1.6rem);
+  transition: transform .25s, opacity .4s;
+  animation: seal 2.4s ease-in-out infinite;
+}
+.seal:hover { transform: scale(1.1) rotate(-4deg); }
+.seal:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+@keyframes seal { 50% { box-shadow: 0 4px 10px rgba(0,0,0,.5), 0 0 0 10px rgba(232,194,106,.18); } }
+.envelope.open .seal { opacity: 0; pointer-events: none; }
+.envelope.gone { opacity: 0; transform: translateY(40px) scale(.9); pointer-events: none; }
+.peek { position: absolute; left: 6%; right: 6%; top: 8%; bottom: 6%; background: var(--parch); border-radius: 3px; z-index: 1; transform: translateY(0); transition: transform .9s .5s ease; }
+.envelope.open .peek { transform: translateY(-34%); }
+
+.letter {
+  position: fixed; z-index: 5; left: 50%; top: 50%;
+  width: min(92vw, 560px); max-height: 88dvh; overflow: auto;
+  transform: translate(-50%, -46%) scale(.85); opacity: 0; pointer-events: none;
+  transition: transform .8s cubic-bezier(.2,.8,.2,1), opacity .6s;
+  padding: clamp(24px, 6vw, 44px) clamp(20px, 6vw, 40px);
+  color: var(--ink); text-align: center;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(255,255,255,.35), transparent 55%),
+    radial-gradient(ellipse at 90% 100%, rgba(120,80,30,.28), transparent 60%),
+    var(--parch);
+  border: 2px solid var(--parch-edge); border-radius: 8px;
+  box-shadow: 0 30px 70px rgba(0,0,0,.6), inset 0 0 40px rgba(140,95,40,.35);
+}
+.letter.show { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+.kicker { margin: 0; font-size: .95rem; letter-spacing: .28em; text-transform: uppercase; font-weight: 700; color: #7a4f24; }
+.to { margin: 18px 0 0; font-family: var(--hand); font-size: 1.7rem; color: var(--wax); }
+h1 { margin: 2px 0 0; font-size: clamp(2.8rem, 15vw, 5rem); line-height: 1; font-weight: 700; text-wrap: balance; text-shadow: 0 2px 0 rgba(255,255,255,.4); }
+.rank { margin: 6px 0 0; font-style: italic; font-size: 1.35rem; text-wrap: balance; }
+.rule { height: 2px; margin: 20px auto; width: 60%; background: linear-gradient(90deg, transparent, #7a4f24, transparent); }
+.list { margin: 0 auto; padding: 0; list-style: none; max-width: 24em; text-align: left; display: grid; gap: 8px; font-size: 1.2rem; }
+.list li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dotted rgba(90,60,30,.45); padding-bottom: 6px; }
+.list b { font-weight: 700; text-align: right; }
+.note { margin: 20px 0 0; font-size: 1.15rem; text-wrap: balance; }
+.sign { margin: 18px 0 0; font-family: var(--hand); font-size: 1.5rem; color: var(--wax); }
+.btns { margin-top: 22px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn { font: 700 1rem var(--display); letter-spacing: .08em; padding: 10px 18px; border-radius: 4px; cursor: pointer; border: 1.5px solid #7a4f24; background: transparent; color: var(--ink); }
+.btn:hover { background: rgba(122,79,36,.16); }
+.btn:focus-visible { outline: 3px solid var(--wax); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01s !important; transition-delay: 0s !important; }
+}
+</style>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="castle" aria-hidden="true"></div>
+<div class="candle" style="left:9%; top:18%; animation-delay:-1s" aria-hidden="true"></div>
+<div class="candle" style="left:24%; top:9%; animation-delay:-3s" aria-hidden="true"></div>
+<div class="candle" style="right:22%; top:12%; animation-delay:-2s" aria-hidden="true"></div>
+<div class="candle" style="right:8%; top:24%; animation-delay:-4s" aria-hidden="true"></div>
+
+<main class="stage">
+  <div class="envelope" id="env">
+    <div class="env-back"></div>
+    <div class="peek"></div>
+    <div class="env-front"></div>
+    <div class="addr">Gửi phù thủy Bảo Linh</div>
+    <div class="flap"></div>
+    <button class="seal" id="seal" type="button" aria-label="Mở thư">BL</button>
+  </div>
+  <p class="hint" id="hint">Chạm vào con dấu sáp để mở thư</p>
+</main>
+
+<article class="letter" id="letter" aria-live="polite">
+  <p class="kicker">Thư triệu tập phù thủy</p>
+  <p class="to">Gửi</p>
+  <h1>Bảo Linh</h1>
+  <p class="rank">Phù thủy hói đầu nhất thế giới phép thuật</p>
+  <div class="rule"></div>
+  <ul class="list">
+    <li><span>Đũa phép</span><b>1 cây</b></li>
+    <li><span>Mũ phù thủy</span><b>bắt buộc, trời lạnh</b></li>
+    <li><span>Số sợi tóc</span><b>0 (đã kiểm tra bằng bùa)</b></li>
+    <li><span>Độ bóng</span><b>phản chiếu được Lumos</b></li>
+  </ul>
+  <p class="note">Bộ Pháp thuật xác nhận: không loại thuốc mọc tóc nào có tác dụng, nên Bảo Linh được phép tự hào về cái đầu bóng loáng của mình.</p>
+  <p class="sign">Ký tên: Hiệu trưởng Trọc Đầu</p>
+  <div class="btns">
+    <button class="btn" id="wand" type="button">Vẫy đũa phép</button>
+    <button class="btn" id="again" type="button">Đọc lại</button>
+  </div>
+</article>
+
+<script>
+(function () {
+  var cv = document.getElementById('sky'), cx = cv.getContext('2d');
+  var W = 0, H = 0, stars = [], sparks = [];
+  function size() {
+    var r = window.devicePixelRatio || 1;
+    W = window.innerWidth; H = window.innerHeight;
+    cv.width = W * r; cv.height = H * r;
+    cx.setTransform(r, 0, 0, r, 0, 0);
+    stars = [];
+    for (var i = 0; i < 110; i++) stars.push({ x: Math.random() * W, y: Math.random() * H * 0.8, r: Math.random() * 1.5 + 0.3, p: Math.random() * 6.28, s: Math.random() * 1.5 + .5 });
+  }
+  size(); window.addEventListener('resize', size);
+  function burst(x, y, n) {
+    for (var i = 0; i < n; i++) {
+      var a = Math.random() * 6.28, v = Math.random() * 2.6 + .6;
+      sparks.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - .4, life: 1, c: Math.random() < .5 ? '232,194,106' : '255,244,200' });
+    }
+  }
+  var last = 0;
+  function frame(t) {
+    cx.clearRect(0, 0, W, H);
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      cx.globalAlpha = .45 + .5 * Math.sin(t / 700 * s.s + s.p);
+      cx.fillStyle = '#fff';
+      cx.beginPath(); cx.arc(s.x, s.y, s.r, 0, 6.28); cx.fill();
+    }
+    for (var j = sparks.length - 1; j >= 0; j--) {
+      var p = sparks[j];
+      p.x += p.vx; p.y += p.vy; p.vy += .03; p.life -= .018;
+      if (p.life <= 0) { sparks.splice(j, 1); continue; }
+      cx.globalAlpha = p.life;
+      cx.fillStyle = 'rgb(' + p.c + ')';
+      cx.beginPath(); cx.arc(p.x, p.y, 2.2 * p.life + .4, 0, 6.28); cx.fill();
+    }
+    cx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  window.addEventListener('pointermove', function (e) { if (Math.random() < .5) burst(e.clientX, e.clientY, 1); });
+  window.addEventListener('pointerdown', function (e) { burst(e.clientX, e.clientY, 14); });
+
+  var env = document.getElementById('env'), letter = document.getElementById('letter'), hint = document.getElementById('hint');
+  var timers = [];
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function openIt() {
+    if (env.classList.contains('open')) return;
+    env.classList.add('open'); hint.style.display = 'none';
+    burst(W / 2, H / 2, 40);
+    later(function () { env.classList.add('gone'); letter.classList.add('show'); burst(W / 2, H / 2, 60); }, 1700);
+  }
+  document.getElementById('seal').addEventListener('click', openIt);
+  document.getElementById('wand').addEventListener('click', function (e) {
+    var r = e.currentTarget.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top, 70);
+    burst(W / 2, H / 3, 70);
+  });
+  document.getElementById('again').addEventListener('click', function () {
+    timers.forEach(clearTimeout); timers = [];
+    letter.classList.remove('show'); env.classList.remove('gone', 'open'); hint.style.display = '';
+  });
+})();
+</script>
+
+</body></html>
